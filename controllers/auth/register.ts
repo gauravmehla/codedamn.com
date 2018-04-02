@@ -27,7 +27,7 @@ router.post('/register', async (req, res) => {
     const json = await result.json()
 
     if(json.success) {
-        User.create({
+        await User.create({
             name: 'something',
             username,
             email,

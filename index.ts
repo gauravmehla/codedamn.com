@@ -5,9 +5,12 @@ import * as exphbs from 'express-handlebars'
 import routes from './controllers'
 import * as helmet from 'helmet'
 import * as xdebug from 'debug'
+import * as mongoose from 'mongoose'
 
 const app = express()
 const debug = xdebug('cd:index')
+
+mongoose.connect('mongodb://localhost/codedamn')
 
 if(process.env.NODE_ENV != 'production') { // not in production. Need express to serve static files
 	app.use('/assets', express.static(path.join(__dirname, 'assets')))

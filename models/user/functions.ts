@@ -62,6 +62,7 @@ const functions = {
 	},
 
 	async create(details: usermeta) {
+		debug("Here")
 		const errors = await this.validate(details)
 		if(errors.length > 0) {
 			throw errors
@@ -115,13 +116,6 @@ const functions = {
 		
 	}
 }
+//const proxy = new Proxy(functions, handler)
 
-const handler = {
-    get: function(obj, prop) {
-        return prop in obj ? obj[prop] : User[prop]
-    }
-}
-
-const proxy = new Proxy(functions, handler)
-
-export default proxy
+export default functions
