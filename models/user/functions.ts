@@ -114,8 +114,12 @@ const functions = {
 
 	async serialize(req, res, next) { 
 		
+	},
+
+	async findDamner(obj) {
+		// TODO: After passwords are being stored as hash, encrypt the user password and send it to DB call.
+		return User.findOne(obj)
 	}
 }
-//const proxy = new Proxy(functions, handler)
 
 export default functions

@@ -15,8 +15,8 @@ router.post('/login', async (req, res) => {
 
     const username = req.body.username
     const password = req.body.password
-
-    if(await User.model.findOne({username, password})) {
+    const data = await User.findDamner({username, password})
+    if(data) {
         // user exists
         // TODO: create a session
         debug('User exists. Create a session')
