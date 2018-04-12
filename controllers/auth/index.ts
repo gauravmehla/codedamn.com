@@ -1,7 +1,8 @@
 import login from './login'
 import register from './register'
+import middleware from './middleware'
 
 export default router => {
-    router.use('/', login)
-    router.use('/', register)    
+    router.use('/', middleware, login)
+    router.use('/', middleware, register)    
 }

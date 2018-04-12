@@ -23,6 +23,7 @@ router.post('/login', async (req, res) => {
         // TODO: create a session
         debug('User exists. Creating a session')
         req.session.user = username
+        req.session.auth = true
         res.redirect('/')
     } else {
         debug('Invalid login')
