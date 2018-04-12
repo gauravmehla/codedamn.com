@@ -13,8 +13,6 @@ import * as Store from 'connect-mongo'
 
 const MongoStore = Store(session)
 
-mongoose.Promise = Promise
-
 async function boot() {
 	const app = express()
 	const debug = xdebug('cd:index')

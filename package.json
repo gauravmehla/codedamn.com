@@ -10,8 +10,11 @@
   "author": "Mehul",
   "license": "ISC",
   "dependencies": {
+    "@types/connect-mongo": "0.0.35",
+    "@types/cookie-parser": "^1.4.1",
     "@types/express-handlebars": "0.0.30",
     "@types/express-session": "^1.15.8",
+    "@types/helmet": "0.0.37",
     "connect-mongo": "^2.0.1",
     "cookie-parser": "^1.4.3",
     "debug": "^3.1.0",
