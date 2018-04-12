@@ -275,3 +275,11 @@ a {
     align-items: center;
     margin-top: 15px;
 }
+
+div#error {
+    margin-top: 20px;
+    background: #de4c34;
+    color: white;
+    padding: 5px;
+    display: inline-block;
+}

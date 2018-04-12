@@ -6,7 +6,10 @@ const router = express.Router()
 const debug = xdebug('cd:Login')
 
 router.get('/login', (req, res) => {
-    res.render('home/login', { layout: 'auth', title: 'Login' })
+    if(req.query.error !== undefined) {
+        return res.render('home/login', { layout: 'auth', title: 'Login', error: true })
+    }
+    return res.render('home/login', { layout: 'auth', title: 'Login' })
 })
 
 // handle username-password logins
@@ -19,7 +22,7 @@ router.post('/login', async (req, res) => {
         // user exists
         // TODO: create a session
         debug('User exists. Creating a session')
-        req.session
+        req.session.user = username
         res.redirect('/')
     } else {
         debug('Invalid login')

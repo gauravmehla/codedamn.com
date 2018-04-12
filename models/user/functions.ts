@@ -14,8 +14,6 @@ const debug = xdebug('cd:UserController')
 const functions = {
 
 	async validate(details) {
-		
-		return true // DEBUG MODE!
 
 		debug("Validation details are ", JSON.stringify(details))
 		const errors = []
@@ -26,35 +24,53 @@ const functions = {
 			return errors
 		}
 
+		if(!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(details.email))) {
+			errors.push("Email address is not valid")
+			return errors
+		}
+
 		if(await this.emailExists(details.email)) {
-			errors.push("Email already registered. Try to reset password")
+			errors.push("Email already registered")
 			return errors
 		}
 
 		if(!details.name || details.name.length < 2 || details.name.length > 30) {
 			errors.push("Your name doesn't seem to be valid. Try a longer/shorter name?")
+			return errors
 		}
 
-		if(!(/^[a-z0-9]+$/i.test(details.username))) {
-			errors.push("Username should be alphanumeric and can include underscores")
-		} else if(reservedUsers.indexOf(details.username) !== -1 || details.username.includes("codedamn")) {
-			errors.push("Invalid username. Try some other username")
-		} else if(details.username.length < 3) {
+		if(!(/^[a-z0-9_]+$/i.test(details.username))) {
+			errors.push("Username should be alphanumeric and can include only underscores")
+		} 
+		
+		if(reservedUsers.indexOf(details.username) !== -1 || details.username.includes("codedamn")) {
+			errors.push("This username is reserved")
+			return errors
+		} 
+		
+		if(details.username.length < 3) {
 			errors.push("Username too small. Min length should be 4")
-		} else if(details.username.length > 15) {
-			errors.push("Username too large. Max length should be 15")
+			return errors
 		}
-
-		if(!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(details.email))) {
-			errors.push("Email address is not valid")
+		
+		if(details.username.length > 15) {
+			errors.push("Username too large. Max length should be 15")
+			return errors
 		}
 
 		if(details.password !== details.confirmPassword) {
 			errors.push("Passwords do not match")
-		} else if(details.password.length < 5) {
+			return errors
+		}
+		
+		if(details.password.length < 5) {
 			errors.push("Password too small")
-		} else if(details.password.length > 100) {
-			errors.push("Password too large. Don't worry we're secure :) Use a smaller password")
+			return errors
+		}
+		
+		if(details.password.length > 150) {
+			errors.push("Password too large. Don't worry we're secure :) Use a password < 150 characters")
+			return errors
 		}
 
 		return errors
@@ -65,8 +81,7 @@ const functions = {
 		debug("Here")
 		const errors = await this.validate(details)
 		if(errors.length > 0) {
-			throw errors
-			return
+			return errors
 		}
 		const metadata = {
             name: details.name,
@@ -74,12 +89,10 @@ const functions = {
             email: details.email,
             password: details.password
     	}
-    	if(details.via) {
-    		metadata[`${details.via}Linked`] = details.email // setting ( facebook, github, twitter, google ) Linked to true
-    	}
+
 		const user = new User(metadata)
     	debug(await user.save())
-    	return user
+    	return [] // no errors
 	},
 
 	async exists(username, password) {

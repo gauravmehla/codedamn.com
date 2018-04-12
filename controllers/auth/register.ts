@@ -23,20 +23,23 @@ router.post('/register', async (req, res) => {
         method: 'GET'
     })
 
-
     const json = await result.json()
 
     if(json.success) {
-        await User.create({
+        const errors = await User.create({
             name: 'something',
             username,
             email,
             password
         })
-        res.json({status: 'done'})
+        if(errors.length == 0) {
+            res.json({code: 200, errors: null})
+        } else {
+            res.json({code: 200, errors})
+        }
     } else {
         // TODO: Add valid response
-        res.json({status:'Problem with registeration'})
+        res.json({code: 500})
     }
 })
 

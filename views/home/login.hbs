@@ -3,6 +3,7 @@
 <div class="contact-form">
 	<form class="contact_form" action="/login" method="post" name="contact_form">
 		<h1>Login Into Your Account</h1>
+		{{#if error}}<div id='error'>Incorrect username/password</div>{{/if}}
 	    <ul>
 	        <li>
 	            <input type="text" class="textbox1" name="username" placeholder="codedamn" autocomplete="false">
