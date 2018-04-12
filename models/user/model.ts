@@ -1,7 +1,5 @@
 import * as mongoose from 'mongoose'
 
-mongoose.Promise = Promise
-
 const UserSchema = new mongoose.Schema({  
   name: String,
   username: String,

@@ -6,35 +6,53 @@ import routes from './controllers'
 import * as helmet from 'helmet'
 import * as xdebug from 'debug'
 import * as mongoose from 'mongoose'
+import * as session from 'express-session'
+import { cookieSecret } from './secrets'
+import * as cookieParser from 'cookie-parser'
+import * as Store from 'connect-mongo'
 
-const app = express()
-const debug = xdebug('cd:index')
+const MongoStore = Store(session)
 
-mongoose.connect('mongodb://localhost/codedamn')
+mongoose.Promise = Promise
 
-if(process.env.NODE_ENV != 'production') { // not in production. Need express to serve static files
-	app.use('/assets', express.static(path.join(__dirname, 'assets')))
-} else {
-	// set up debug variables
-	process.env.DEBUG = "cd:*"
-	process.env.DEBUG_COLORS = 'true'
-}
-// nginx is configured for static assets
+async function boot() {
+	const app = express()
+	const debug = xdebug('cd:index')
 
-app.engine('.hbs', exphbs({
-	extname: '.hbs',
-	helpers: {
-		inc: function(value, options) {
-		    return parseInt(value) + 1;
-		}
+	await mongoose.connect('mongodb://localhost/codedamn')
+
+	if(process.env.NODE_ENV != 'production') { // not in production. Need express to serve static files
+		app.use('/assets', express.static(path.join(__dirname, 'assets')))
 	}
-}))
-app.set('view engine', '.hbs')
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
+	// nginx is configured for static assets
 
-routes(app) // register route
+	app.engine('.hbs', exphbs({
+		extname: '.hbs',
+		helpers: {
+			inc: function(value, options) {
+				return parseInt(value) + 1;
+			}
+		}
+	}))
+	app.set('view engine', '.hbs')
+	app.use(bodyParser.json())
+	app.use(bodyParser.urlencoded({ extended: false }))
 
-app.use(helmet())
+	routes(app) // register routes
 
-app.listen(1337, () => debug('Server up and running at localhost:1337'))
+	app.use(helmet())
+
+
+	app.use(cookieParser(cookieSecret))
+	app.use(session({
+		secret: cookieSecret,
+		resave: false,
+		saveUninitialized: true,
+		cookie: { secure: 'auto' }, // secure cookies on HTTPS (prod) ; insecure on HTTP (dev)
+		store: new MongoStore({ mongooseConnection: mongoose.connection })
+	}))
+
+	app.listen(1337, () => debug('Server up and running at localhost:1337'))
+}
+
+boot()
