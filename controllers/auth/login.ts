@@ -12,14 +12,14 @@ router.get('/login', (req, res) => {
 // handle username-password logins
 router.post('/login', async (req, res) => {
     // TODO: Put invisible captcha on login page
-
     const username = req.body.username
     const password = req.body.password
     const data = await User.findDamner({username, password})
     if(data) {
         // user exists
         // TODO: create a session
-        debug('User exists. Create a session')
+        debug('User exists. Creating a session')
+        req.session
         res.redirect('/')
     } else {
         debug('Invalid login')

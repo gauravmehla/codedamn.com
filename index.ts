@@ -36,14 +36,12 @@ async function boot() {
 	}))
 	app.set('view engine', '.hbs')
 	app.use(bodyParser.json())
-	app.use(bodyParser.urlencoded({ extended: false }))
-
-	routes(app) // register routes
+	app.use(bodyParser.urlencoded({ extended: false })) // parsing POST data
 
 	app.use(helmet())
 
+	app.use(cookieParser(cookieSecret)) // signing and parsing cookies
 
-	app.use(cookieParser(cookieSecret))
 	app.use(session({
 		secret: cookieSecret,
 		resave: false,
@@ -51,6 +49,8 @@ async function boot() {
 		cookie: { secure: 'auto' }, // secure cookies on HTTPS (prod) ; insecure on HTTP (dev)
 		store: new MongoStore({ mongooseConnection: mongoose.connection })
 	}))
+
+	routes(app) // register routes
 
 	app.listen(1337, () => debug('Server up and running at localhost:1337'))
 }
