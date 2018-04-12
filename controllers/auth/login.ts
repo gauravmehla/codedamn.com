@@ -1,11 +1,12 @@
 import * as express from 'express'
 import * as xdebug from 'debug'
 import User from '../../models/user'
+import redirectAuthenticated from '../../middlewares/AuthenticatedUsers/redirectAuthenticated';
 
 const router = express.Router()
 const debug = xdebug('cd:Login')
 
-router.get('/login', (req, res) => {
+router.get('/login', redirectAuthenticated, (req, res) => {
     if(req.query.error !== undefined) {
         return res.render('home/login', { layout: 'auth', title: 'Login', error: true })
     }
@@ -13,7 +14,7 @@ router.get('/login', (req, res) => {
 })
 
 // handle username-password logins
-router.post('/login', async (req, res) => {
+router.post('/login', redirectAuthenticated, async (req, res) => {
     // TODO: Put invisible captcha on login page
     const username = req.body.username
     const password = req.body.password
@@ -24,7 +25,7 @@ router.post('/login', async (req, res) => {
         debug('User exists. Creating a session')
         req.session.user = username
         req.session.auth = true
-        res.redirect('/')
+        res.redirect('/panel')
     } else {
         debug('Invalid login')
         res.redirect('/login?error')
