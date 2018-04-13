@@ -1,14 +1,18 @@
 import * as express from 'express'
 import * as xdebug from 'debug'
-import { reCAPTCHAsecret } from '../../secrets'
 import User from '../../models/user'
 import * as fetch from 'node-fetch'
+import * as Config from 'config'
 
 const router = express.Router()
 const debug = xdebug('cd:Register')
+const reCAPTCHAsecret = Config.get('reCAPTCHAsecret')
+const captchSiteKey = Config.get('captchSiteKey')
+
 
 router.get('/register', (req, res) => {
-    res.render('home/register', { layout: 'auth', title: 'Register' })
+    res.render('home/register', { layout: 'auth', title: 'Register', captchSiteKey: captchSiteKey })
+
 })
 
 router.post('/register', async (req, res) => {
