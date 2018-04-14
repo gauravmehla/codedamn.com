@@ -53,7 +53,9 @@ function nextClicked({target}) {
         }
     }
     
-
+    if(qcount-- <= 0) {
+        sendData()
+    }
     blocks[index].classList.remove('active')
     blocks[index + 1].classList.add('active')
 }
@@ -62,18 +64,13 @@ async function sendData() {
     console.log('Sending Data')
     const data = await fetch('/hello', {
         method: 'POST',
+        credentials: 'same-origin',
         body: JSON.stringify(form)
     })
 
-    if(!data.success) {
-        alert('Some problem with your submission')
-    } else {
-        next(-1)
-    }
-}
+    const json = await data.json()
 
-function next(index) {
-    //debugger
-    const nextBlock = index == -1 ? questions[qcount-1] : questions[index]
-    nextBlock.classList.add('active')
+    if(!json.success) {
+        alert('Some problem with your submission')
+    }
 }

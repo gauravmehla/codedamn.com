@@ -5,6 +5,7 @@ export interface user extends mongoose.Document {
     username: String,
     email: String,
     password: String,
+    ltags: [String],
     facebookLinked?: String,
     twitterLinked?: String,
     githubLinked?: String,

@@ -1,9 +1,12 @@
 import * as express from 'express'
+import User from '../../models/user'
+import { user } from '../../interfaces/user';
 const router = express.Router()
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+    const firstTime: Boolean = req.session.firstTime || (await User.findDamner({username: req.session.user})).firstTime
 
-    if(req.session.firstTime) {
+    if(firstTime) {
         return res.redirect('/hello')
     }
 

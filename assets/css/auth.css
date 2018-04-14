@@ -125,11 +125,11 @@ body {
     font-weight: 300;
 }
 
-.forgot {
+.forgot, .register {
     margin-top: 4px;
 }
 
-.forgot a {
+.forgot a, .register a {
     color: var(--light-gray);
     font-size: 1.1em;
 }
