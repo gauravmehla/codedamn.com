@@ -1,0 +1,7 @@
+{
+    "dbConnectionString":"mongodb://localhost/codedamn",
+    "portNumber": 1337,
+    "cookieSecret" : "",
+    "reCAPTCHAsecret" : "",
+    "captchSiteKey" : ""
+}
