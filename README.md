@@ -9,7 +9,7 @@ codedamn is built on the top of Node v8.9, Express Framework, MongoDB, Mongoose 
 ## Cloning the project
 1. Fork this repo
 2. Run `git clone https://github.com/<YOUR_NICK>/codedamn.com`
-3. Run the followin commands on the terminal
+3. Run the following commands on the terminal
 ```
 For Ubuntu/Mac users
 export codedamn_cookieSecret=SOME_RANDOM_STRING // you can generate your own key as well. Generate here: https://www.google.com/recaptcha/admin#list
