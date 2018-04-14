@@ -12,6 +12,14 @@ $('.option').forEach( x => {
     x.addEventListener('click', optionClicked, false)
 })
 
+function setActive(elem) {
+    elem.classList.add('activeOpt')
+}
+
+function setInactive(elem) {
+    elem.classList.remove('activeOpt')
+}
+
 function optionClicked({target}) {
     const name = target.parentElement.dataset.name
     const value = target.innerText.toLowerCase()
@@ -19,21 +27,33 @@ function optionClicked({target}) {
         form[name] = form[name] || []
         if(form[name].indexOf(value) === -1) {
             // deselect element
-            form[name].append(value)
+            form[name].push(value)
+            setActive(target)
         } else {
             // select element
             form[name].splice(form[name].indexOf(value), 1)
+            setInactive(target)
         }
     } else {
         form[name] = value
+        $(`div[data-name="${name}"]`)[0].querySelectorAll('.option').forEach( x => setInactive(x))
+        setActive(target)
     }
     console.log("Form right now", form)
 }
 
 function nextClicked({target}) {
-    // const name = target.parentElement.querySelector('.options').dataset.name
     debugger
     const index = blocks.indexOf(target.parentElement)
+    if(target.parentElement.classList.contains('qblock')) {
+        const name = target.parentElement.querySelector('.options').dataset.name
+        if(!form[name]) {
+            alert('Select a option')
+            return
+        }
+    }
+    
+
     blocks[index].classList.remove('active')
     blocks[index + 1].classList.add('active')
 }

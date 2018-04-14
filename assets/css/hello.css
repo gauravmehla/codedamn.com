@@ -94,3 +94,8 @@ h1 {
 .active.block {
   display: flex;
 }
+
+.option.activeOpt {
+  background: #727272;
+  color: white;
+}
