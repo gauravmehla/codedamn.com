@@ -7,7 +7,7 @@ export default () => {
     const debug = xdebug('cd:startup')
     
     // Check if cookieSecret is defined
-    if (!Config.get('cookieSecret')) {
+    if (!Config.has('cookieSecret') || !Config.get('cookieSecret')) {
         isError = true
         debug('Please define the value for codedamn_cookieSecret')
     } else {
@@ -15,7 +15,7 @@ export default () => {
     }
 
     // Check if reCAPTCHAsecret is defined
-    if (!Config.get('reCAPTCHAsecret')) {
+    if (!Config.has('reCAPTCHAsecret') || !Config.get('reCAPTCHAsecret')) {
         isError = true
         debug('Please define the value for codedamn_reCAPTCHAsecret')
     } else {
@@ -23,7 +23,7 @@ export default () => {
     }
     
     // Check if captchSiteKey is defined
-    if (!Config.get('captchSiteKey')) {
+    if (!Config.has('captchSiteKey') || !Config.get('captchSiteKey')) {
         isError = true
         debug('Please define the value for codedamn_captchSiteKey')
     } else {
