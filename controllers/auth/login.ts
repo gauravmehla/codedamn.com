@@ -3,6 +3,8 @@ import * as xdebug from 'debug'
 import User from '../../models/user'
 import redirectAuthenticated from '../../middlewares/AuthenticatedUsers/redirectAuthenticated';
 
+import { user } from '../../interfaces/user'
+
 const router = express.Router()
 const debug = xdebug('cd:Login')
 
@@ -18,13 +20,14 @@ router.post('/login', redirectAuthenticated, async (req, res) => {
     // TODO: Put invisible captcha on login page
     const username = req.body.username
     const password = req.body.password
-    const data = await User.findDamner({username, password})
+    const data: user = await User.findDamner({username, password})
     if(data) {
         // user exists
         // TODO: create a session
         debug('User exists. Creating a session')
-        req.session.user = username
+        req.session.user = data.username
         req.session.auth = true
+        req.session.firstTime = data.firstTime
         res.redirect('/panel')
     } else {
         debug('Invalid login')

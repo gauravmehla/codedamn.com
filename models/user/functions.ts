@@ -1,5 +1,6 @@
 import User from './model'
 import * as xdebug from 'debug'
+import { user } from '../../interfaces/user';
 
 interface usermeta {
 	name: string,
@@ -129,7 +130,7 @@ const functions = {
 		
 	},
 
-	async findDamner(obj) {
+	async findDamner(obj): Promise<user> {
 		// TODO: After passwords are being stored as hash, encrypt the user password and send it to DB call.
 		return User.findOne(obj)
 	}
