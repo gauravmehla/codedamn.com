@@ -24,7 +24,8 @@ router.post('/', async (req, res) => {
         const user: user = await User.findDamner({username: req.session.user})
         user.firstTime = false
         user.ltags = tags
-        user.save()
+        req.session.firstTime = false
+        await user.save()
         res.json({
             success: true
         })
