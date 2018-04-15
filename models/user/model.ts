@@ -6,12 +6,13 @@ const UserSchema = new mongoose.Schema({
   username: String,
   email: String,
   password: String,
-  ltags: Array,
+  ltags: {type: [String], default: []},
   facebookLinked: {type: String, default: ""},
   twitterLinked: {type: String, default: ""},
   githubLinked: {type: String, default: ""},
   googleLinked: {type: String, default: ""},
-  firstTime: { type: Boolean, default: true }
+  firstTime: { type: Boolean, default: true },
+  level: { type: String, default: "0" }
 }, { collection: 'users' })
 
 const model = mongoose.model<user>('User', UserSchema)

@@ -10,5 +10,6 @@ export interface user extends mongoose.Document {
     twitterLinked?: String,
     githubLinked?: String,
     googleLinked?: String,
-    firstTime: Boolean
+    firstTime: Boolean,
+    level: String
 }

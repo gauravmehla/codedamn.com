@@ -135,6 +135,25 @@ const functions = {
 	async findDamner(obj): Promise<user> {
 		// TODO: After passwords are being stored as hash, encrypt the user password and send it to DB call.
 		return User.findOne(obj)
+	},
+
+	calculateLevel(languages: [string]): string {
+		const mapping = { // base level score
+			javascript: 0.2,
+			html: 0.1,
+			css: 0.1,
+			php: 0.2,
+			c: 0.3,
+			python: 0.3
+		}
+
+		let score = 0
+
+		languages.forEach(l => {
+			score += mapping[l] || 0
+		})
+
+		return Math.ceil(score).toString()
 	}
 }
 

@@ -80,6 +80,7 @@ h1 {
 .block .options {
   display: flex;
   margin-top: 80px;
+  flex-wrap: wrap;
 }
 
 .options .option {

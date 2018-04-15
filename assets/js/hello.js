@@ -23,6 +23,14 @@ function setInactive(elem) {
 function optionClicked({target}) {
     const name = target.parentElement.dataset.name
     const value = target.innerText.toLowerCase()
+    const exit = target.dataset.exit
+    
+    if(exit === "1") {
+        target.parentElement.dataset.exit = "1"
+    } else {
+        target.parentElement.dataset.exit = "0"
+    }
+
     if(target.classList.contains('multiple')) { // multiple answers possible
         form[name] = form[name] || []
         if(form[name].indexOf(value) === -1) {
@@ -43,10 +51,11 @@ function optionClicked({target}) {
 }
 
 function nextClicked({target}) {
-    debugger
     const index = blocks.indexOf(target.parentElement)
+    let dataset
     if(target.parentElement.classList.contains('qblock')) {
-        const name = target.parentElement.querySelector('.options').dataset.name
+        dataset = target.parentElement.querySelector('.options').dataset
+        const name = dataset.name
         if(!form[name]) {
             alert('Select a option')
             return
@@ -55,17 +64,29 @@ function nextClicked({target}) {
     
     if(qcount-- <= 0) {
         sendData()
+        blocks[index].classList.remove('active')
+        blocks[index + 1].classList.add('active')
+    } else if(dataset && dataset.exit === "1") {
+        debugger
+        sendData()
+        blocks.forEach(b => b.classList.remove('active'))
+        blocks[blocks.length-1].classList.add('active')
+    } else {
+        blocks[index].classList.remove('active')
+        blocks[index + 1].classList.add('active')
     }
-    blocks[index].classList.remove('active')
-    blocks[index + 1].classList.add('active')
 }
 
 async function sendData() {
+    debugger
     console.log('Sending Data')
     const data = await fetch('/hello', {
         method: 'POST',
         credentials: 'same-origin',
-        body: JSON.stringify(form)
+        body: JSON.stringify(form),
+        headers: {
+            'Content-Type': 'application/json'
+        }
     })
 
     const json = await data.json()

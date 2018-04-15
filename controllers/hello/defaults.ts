@@ -13,16 +13,14 @@ router.get('/', (req, res) => {
 
 router.post('/', async (req, res) => {
     const doneprogrammingbefore = req.body.doneprogrammingbefore
-    let tags = req.body.tags
+    let tags = req.body.tags || []
+    debug(req.body)
     // TODO: Add validation of responses here by looking at frontend
-    if(req.body.doneprogrammingbefore === "no") {
-        tags = []
-    }
-
     try {
         debug(req.session)
         const user: user = await User.findDamner({username: req.session.user})
         user.firstTime = false
+        user.level = User.calculateLevel(tags)
         user.ltags = tags
         req.session.firstTime = false
         await user.save()
