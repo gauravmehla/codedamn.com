@@ -10,6 +10,7 @@
   "author": "Mehul",
   "license": "ISC",
   "dependencies": {
+    "@types/config": "0.0.34",
     "@types/connect-mongo": "0.0.35",
     "@types/cookie-parser": "^1.4.1",
     "@types/debug": "0.0.30",

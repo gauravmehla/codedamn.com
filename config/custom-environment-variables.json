@@ -1,5 +1,6 @@
 {
     "cookieSecret" : "codedamn_cookieSecret",
     "reCAPTCHAsecret" : "codedamn_reCAPTCHAsecret",
-    "captchSiteKey" : "codedamn_captchSiteKey"
+    "captchSiteKey" : "codedamn_captchSiteKey",
+    "debug": "DEBUG"
 }
