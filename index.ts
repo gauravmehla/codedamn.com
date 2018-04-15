@@ -1,3 +1,4 @@
+import initConfig from './startup/config'
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import * as path from 'path'
@@ -7,23 +8,27 @@ import * as helmet from 'helmet'
 import * as xdebug from 'debug'
 import * as mongoose from 'mongoose'
 import * as session from 'express-session'
-import { cookieSecret } from './secrets'
 import * as cookieParser from 'cookie-parser'
 import * as Store from 'connect-mongo'
+import * as Config from 'config'
 
 const MongoStore = Store(session)
 
 async function boot() {
+	// Check if environment variables are defined
+	initConfig()
+
 	const app = express()
 	const debug = xdebug('cd:index')
+	const portNumber = process.env.PORT || Config.get('portNumber')
 
-	await mongoose.connect('mongodb://localhost/codedamn')
+	await mongoose.connect(Config.get('dbConnectionString'))
 
 	if(process.env.NODE_ENV != 'production') { // not in production. Need express to serve static files
 		app.use('/assets', express.static(path.join(__dirname, 'assets')))
 	}
-	// nginx is configured for static assets
 
+	// nginx is configured for static assets
 	app.engine('.hbs', exphbs({
 		extname: '.hbs',
 		helpers: {
@@ -38,10 +43,10 @@ async function boot() {
 
 	app.use(helmet())
 
-	app.use(cookieParser(cookieSecret)) // signing and parsing cookies
+	app.use(cookieParser(Config.get('cookieSecret'))) // signing and parsing cookies
 
 	app.use(session({
-		secret: cookieSecret,
+		secret: Config.get('cookieSecret'),
 		resave: false,
 		saveUninitialized: true,
 		cookie: { secure: 'auto' }, // secure cookies on HTTPS (prod) ; insecure on HTTP (dev)
@@ -50,7 +55,7 @@ async function boot() {
 
 	routes(app) // register routes
 
-	app.listen(1337, () => debug('Server up and running at localhost:1337'))
+	app.listen(portNumber, () => debug('Server up and running at localhost:' + portNumber))
 }
 
 boot()
