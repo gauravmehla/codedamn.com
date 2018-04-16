@@ -1,4 +1,3 @@
-
 header#topNav {
     position: fixed;
     overflow: hidden;
@@ -34,6 +33,7 @@ div#rightNav {
     align-items: center;
     padding: 0 10px;
     color: white;
+    text-decoration: none;
 }
 
 .navItem, .navItem span {

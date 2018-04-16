@@ -1,3 +1,25 @@
-Panel
+{{>stickyheader}}
 
-<a href="/logout">Logout</a>
+<main class="n60">
+
+    <div id="profile" class="block">
+        <h1>Greetings, {{fullname}}</h1>
+        <p>Trending among people like you:</p>
+        <div class="details">
+            <ul>
+                <li>Learning async/await in JavaScript</li>
+                <li>How DNS Works</li>
+                <li>How HTTPS Works</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="progress" class="block">
+        <h1>Your Weekly Progress</h1>
+        <p>Your weekly progress is calculated on your activity: interaction with community, answering questions, attempting quizzes, contributing to community, etc.</p>
+        <div class="graph" style="width:100%;height:400px;background:black;color:white;display:flex;justify-content:center;align-items:center;">
+            {{! need some kind of graph here which fetches data from api.codedamn.com endpoint and displays the user's weekly progress }}
+            A Graph Goes Here
+        </div>
+    </div>
+</main>

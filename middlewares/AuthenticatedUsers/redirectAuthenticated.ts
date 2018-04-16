@@ -3,7 +3,7 @@ const debug = xdebug('cd:redirectAuthMW')
 
 
 function redirectAuthenticated(req, res, next) {
-    debug(req.session)
+    //debug(req.session)
     if(req.session.auth) {
         // already authenticated users need not see these pages
         res.redirect('/')

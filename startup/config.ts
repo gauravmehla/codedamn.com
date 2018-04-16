@@ -9,8 +9,8 @@ export default () => {
     // Let's warn the developer if debug module's export is not set
     if(!Config.has('debug')) {
         console.log(`WARNING: Debug calls are not shown. To show debug calls, use:
-            Mac/Linux: export DEBUG='cd:*'
-            Windows: set DEBUG='cd:*'`)
+Mac/Linux: export DEBUG='cd:*'
+Windows: set DEBUG='cd:*'`)
     }
     
     // Check if cookieSecret is defined
