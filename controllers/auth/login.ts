@@ -25,7 +25,7 @@ router.post('/login', redirectAuthenticated, async (req, res) => {
         // user exists
         // TODO: create a session
         debug('User exists. Creating a session')
-        req.session.user = data.username
+        req.session.user = data
         req.session.auth = true
         req.session.firstTime = data.firstTime
         res.redirect('/panel')

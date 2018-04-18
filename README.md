@@ -30,7 +30,11 @@ npm i -g ts-node
 ```
 7. Make sure to start your mongodb server by writing `sudo mongod` in your terminal if your mongodb server is not running. (Check by writing `mongo` in terminal, if you get mongo shell, then your mongodb is running)
 8. I recommend using [Robo3T Mongo Client](https://robomongo.org/) for GUI working with DB.
-9. Once everything is done, run `nodemon` command which will pick up configs from supplied `nodemon.json` and `tsconfig.json` files and setup live reloading for `.ts` code.
+9. Finally, open to `/etc/hosts` (Linux/Mac) or `C:\Windows\System32\drivers\etc\hosts` and add the following line in this file (you will need root previliges):
+```
+127.0.0.1 cd.test
+```
+10. Once everything is done, run `nodemon` command in the `git clone` directory which will pick up configs from supplied `nodemon.json` and `tsconfig.json` files and setup live reloading for `.ts` code.
 
 ## Instructions
 1. The site uses TypeScript to enforce proper JavaScript code. [Give it a look](https://www.youtube.com/watch?v=hADI92zCIvE&list=PLYxzS__5yYQkX-95LHG5EDxPj3tVvVmRd) if you need an intro to TypeScript

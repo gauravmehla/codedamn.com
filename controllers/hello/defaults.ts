@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
     // TODO: Add validation of responses here by looking at frontend
     try {
         debug(req.session)
-        const user: user = await User.findDamner({username: req.session.user})
+        const user: user = await User.findDamner({username: req.session.user.username})
         user.firstTime = false
         user.level = User.calculateLevel(tags)
         user.ltags = tags

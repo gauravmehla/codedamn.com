@@ -16,6 +16,7 @@ router.get('/register', (req, res) => {
 })
 
 router.post('/register', async (req, res) => {
+    const name = req.body.name
     const username = req.body.username
     const password = req.body.password
     const email = req.body.email
@@ -31,7 +32,7 @@ router.post('/register', async (req, res) => {
 
     if(json.success) {
         const errors = await User.create({
-            name: 'something',
+            name,
             username,
             email,
             password

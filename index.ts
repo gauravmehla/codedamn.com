@@ -11,6 +11,7 @@ import * as session from 'express-session'
 import * as cookieParser from 'cookie-parser'
 import * as Store from 'connect-mongo'
 import * as Config from 'config'
+import * as vhost from 'vhost'
 
 const MongoStore = Store(session)
 
@@ -45,17 +46,23 @@ async function boot() {
 
 	app.use(cookieParser(Config.get('cookieSecret'))) // signing and parsing cookies
 
+	const domain = process.env.NODE_ENV === 'production' ? '.codedamn.com' : '.cd.test'
+
 	app.use(session({
 		secret: Config.get('cookieSecret'),
 		resave: false,
 		saveUninitialized: true,
-		cookie: { secure: 'auto' }, // secure cookies on HTTPS (prod) ; insecure on HTTP (dev)
+		cookie: { secure: 'auto', domain }, // secure cookies on HTTPS (prod) ; insecure on HTTP (dev)
 		store: new MongoStore({ mongooseConnection: mongoose.connection })
 	}))
 
 	routes(app) // register routes
 
-	app.listen(portNumber, () => debug('Server up and running at localhost:' + portNumber))
+	if(process.env.NODE_ENV !== 'production') {
+		app.use(vhost('cd.test', app))
+	}
+
+	app.listen(portNumber, () => debug(`Server up and running at http://cd.test:${portNumber}`))
 }
 
 boot()

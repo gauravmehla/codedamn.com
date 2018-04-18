@@ -55,7 +55,6 @@ html, body {
     height: 100%;
     font-family: 'Ubuntu';
     font-weight: 300;
-    line-height: 25px;
 }
 
 main {
@@ -78,4 +77,9 @@ h1 {
 
 .block {
   margin-bottom: 70px;
+}
+
+#level {
+  text-align: center;
+  font-size: 4em;
 }

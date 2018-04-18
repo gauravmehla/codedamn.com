@@ -4,22 +4,22 @@
 
     <div id="profile" class="block">
         <h1>Greetings, {{fullname}}</h1>
-        <p>Trending among people like you:</p>
-        <div class="details">
-            <ul>
-                <li>Learning async/await in JavaScript</li>
-                <li>How DNS Works</li>
-                <li>How HTTPS Works</li>
-            </ul>
-        </div>
     </div>
 
     <div id="progress" class="block">
-        <h1>Your Weekly Progress</h1>
+        {{! <h1>Your Weekly Progress</h1>
         <p>Your weekly progress is calculated on your activity: interaction with community, answering questions, attempting quizzes, contributing to community, etc.</p>
         <div class="graph" style="width:100%;height:400px;background:black;color:white;display:flex;justify-content:center;align-items:center;">
-            {{! need some kind of graph here which fetches data from api.codedamn.com endpoint and displays the user's weekly progress }}
+            <!-- need some kind of graph here which fetches data from api.codedamn.com endpoint and displays the user's weekly progress -->
             A Graph Goes Here
-        </div>
+        </div> }}
+        <div id="level">Level 0</div>
+        <p>Your level is everything on codedamn. It defines your reputation. It is based on your activity on codedamn and your skillset. Your level increases automatically when you work here (or any of the associated sites). GO PROGRAM!</p>
+        <p>Tips for increasing your level: </p>
+        <ul>
+            <li>Clear as many quizzes as you can on codedamn. This increases your levels</li>
+            <li>Help community members. Answer questions, or ask quality questions and increase your sublevel!</li>
+            <li>Add new content on codedamn. This is a huge way to boost your level in the initial days of codedamn!</li>
+        </ul>
     </div>
 </main>
