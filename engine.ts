@@ -6,7 +6,7 @@ import * as mongoose from 'mongoose'
 import * as Config from 'config'
 import * as vhost from 'vhost'
 import * as Store from 'connect-mongo'
-import learn from '../learn.codedamn.com/' // UNCOMMENT THIS IF YOU HAVE learn.codedamn.com cloned
+//import learn from '../learn.codedamn.com/' // UNCOMMENT THIS IF YOU HAVE learn.codedamn.com cloned
 import www from './'
 
 async function boot() {
@@ -25,12 +25,12 @@ async function boot() {
 	const store = new MongoStore({ mongooseConnection: mongoose.connection })
 	
 	const codedamn = {
-		learn: learn(store), // UNCOMMENT THIS IF YOU HAVE learn.codedamn.com cloned
+	//	learn: learn(store), // UNCOMMENT THIS IF YOU HAVE learn.codedamn.com cloned
 		www: www(store)
 	}
 
 	app.use(vhost('cd.test', codedamn.www)) // For development only
-	app.use(vhost('learn.cd.test', codedamn.learn)) // UNCOMMENT THIS IF YOU HAVE learn.codedamn.com cloned
+	//app.use(vhost('learn.cd.test', codedamn.learn)) // UNCOMMENT THIS IF YOU HAVE learn.codedamn.com cloned
 
 	app.listen(portNumber, () => debug(`Server up and running at http://cd.test:${portNumber}`))
 }
