@@ -6,11 +6,9 @@ import * as cookieParser from 'cookie-parser'
 import * as bodyParser from 'body-parser'
 import * as exphbs from 'express-handlebars'
 import * as session from 'express-session'
-import * as Store from 'connect-mongo'
 import routes from './controllers'
 
-export default function(mongoose) {
-    const MongoStore = Store(session)
+export default function(store) {
     const app = express()
 
     if(process.env.NODE_ENV != 'production') { // not in production. Need express to serve static files
@@ -26,6 +24,17 @@ export default function(mongoose) {
             }
         }
     }))
+
+    const domain = process.env.NODE_ENV === 'production' ? 'codedamn.com' : 'cd.test'
+    
+    app.use(session({
+        secret: Config.get('cookieSecret'),
+        resave: false,
+        saveUninitialized: true,
+        cookie: { secure: 'auto', domain }, // secure cookies on HTTPS (prod) ; insecure on HTTP (dev)
+        store: store
+	}))
+
     app.set('view engine', '.hbs')
     app.use(bodyParser.json())
     app.use(bodyParser.urlencoded({ extended: false })) // parsing POST data
@@ -33,17 +42,6 @@ export default function(mongoose) {
     app.use(helmet())
 
     app.use(cookieParser(Config.get('cookieSecret'))) // signing and parsing cookies
-
-    const domain = process.env.NODE_ENV === 'production' ? '.codedamn.com' : '.cd.test'
-
-    app.use(session({
-        secret: Config.get('cookieSecret'),
-        resave: false,
-        saveUninitialized: true,
-        cookie: { secure: 'auto',  }, // secure cookies on HTTPS (prod) ; insecure on HTTP (dev)
-        store: new MongoStore({ mongooseConnection: mongoose.connection })
-    }))
-    console.log('xxxx')
 
     routes(app) // register routes
 
