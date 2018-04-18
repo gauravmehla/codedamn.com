@@ -51,3 +51,5 @@ node_modules
 
 # Custom
 codedamn.com_old
+.gitignore
+engine.ts
