@@ -33,6 +33,7 @@ npm i -g ts-node
 9. Finally, open to `/etc/hosts` (Linux/Mac) or `C:\Windows\System32\drivers\etc\hosts` and add the following line in this file (you will need root previliges):
 ```
 127.0.0.1 cd.test
+127.0.0.1 learn.cd.test
 ```
 10. Once everything is done, run `nodemon` command in the `git clone` directory which will pick up configs from supplied `nodemon.json` and `tsconfig.json` files and setup live reloading for `.ts` code.
 
