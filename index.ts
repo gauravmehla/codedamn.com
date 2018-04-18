@@ -1,68 +1,51 @@
-import initConfig from './startup/config'
 import * as express from 'express'
-import * as bodyParser from 'body-parser'
 import * as path from 'path'
-import * as exphbs from 'express-handlebars'
-import routes from './controllers'
 import * as helmet from 'helmet'
-import * as xdebug from 'debug'
-import * as mongoose from 'mongoose'
-import * as session from 'express-session'
-import * as cookieParser from 'cookie-parser'
-import * as Store from 'connect-mongo'
 import * as Config from 'config'
-import * as vhost from 'vhost'
+import * as cookieParser from 'cookie-parser'
+import * as bodyParser from 'body-parser'
+import * as exphbs from 'express-handlebars'
+import * as session from 'express-session'
+import * as Store from 'connect-mongo'
+import routes from './controllers'
 
-const MongoStore = Store(session)
+export default function(mongoose) {
+    const MongoStore = Store(session)
+    const app = express()
 
-async function boot() {
-	// Check if environment variables are defined
-	initConfig()
+    if(process.env.NODE_ENV != 'production') { // not in production. Need express to serve static files
+        app.use('/assets', express.static(path.join(__dirname, 'assets')))
+    }
 
-	const app = express()
-	const debug = xdebug('cd:index')
-	const portNumber = process.env.PORT || Config.get('portNumber')
+    // nginx is configured for static assets
+    app.engine('.hbs', exphbs({
+        extname: '.hbs',
+        helpers: {
+            inc: function(value, options) {
+                return parseInt(value) + 1;
+            }
+        }
+    }))
+    app.set('view engine', '.hbs')
+    app.use(bodyParser.json())
+    app.use(bodyParser.urlencoded({ extended: false })) // parsing POST data
 
-	await mongoose.connect(Config.get('dbConnectionString'))
+    app.use(helmet())
 
-	if(process.env.NODE_ENV != 'production') { // not in production. Need express to serve static files
-		app.use('/assets', express.static(path.join(__dirname, 'assets')))
-	}
+    app.use(cookieParser(Config.get('cookieSecret'))) // signing and parsing cookies
 
-	// nginx is configured for static assets
-	app.engine('.hbs', exphbs({
-		extname: '.hbs',
-		helpers: {
-			inc: function(value, options) {
-				return parseInt(value) + 1;
-			}
-		}
-	}))
-	app.set('view engine', '.hbs')
-	app.use(bodyParser.json())
-	app.use(bodyParser.urlencoded({ extended: false })) // parsing POST data
+    const domain = process.env.NODE_ENV === 'production' ? '.codedamn.com' : '.cd.test'
 
-	app.use(helmet())
+    app.use(session({
+        secret: Config.get('cookieSecret'),
+        resave: false,
+        saveUninitialized: true,
+        cookie: { secure: 'auto',  }, // secure cookies on HTTPS (prod) ; insecure on HTTP (dev)
+        store: new MongoStore({ mongooseConnection: mongoose.connection })
+    }))
+    console.log('xxxx')
 
-	app.use(cookieParser(Config.get('cookieSecret'))) // signing and parsing cookies
+    routes(app) // register routes
 
-	const domain = process.env.NODE_ENV === 'production' ? '.codedamn.com' : '.cd.test'
-
-	app.use(session({
-		secret: Config.get('cookieSecret'),
-		resave: false,
-		saveUninitialized: true,
-		cookie: { secure: 'auto', domain }, // secure cookies on HTTPS (prod) ; insecure on HTTP (dev)
-		store: new MongoStore({ mongooseConnection: mongoose.connection })
-	}))
-
-	routes(app) // register routes
-
-	if(process.env.NODE_ENV !== 'production') {
-		app.use(vhost('cd.test', app))
-	}
-
-	app.listen(portNumber, () => debug(`Server up and running at http://cd.test:${portNumber}`))
+    return app
 }
-
-boot()
